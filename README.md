@@ -1,129 +1,133 @@
 # Northstar Shop
 
-Proyecto portfolio de e-commerce full stack construido desde cero con Java, Spring Boot, PostgreSQL, JWT y frontend vanilla. La idea es mostrar una primera version profesional, limpia y deployable: sin intentar resolver todos los edge cases de un e-commerce real, pero con una base seria y presentable para recruiters.
+Full stack e-commerce portfolio project built from scratch with Java, Spring Boot, PostgreSQL, JWT, and a responsive vanilla JavaScript frontend.
 
-## Stack
+The goal of this project is to show a recruiter-ready first version of a real product flow: authentication, roles, catalog, cart, checkout, orders, admin panel, deployment, and cloud database integration.
+
+## Live Demo
+
+- Frontend: [https://e-commerce-1-7jox.onrender.com](https://e-commerce-1-7jox.onrender.com)
+- Backend API: [https://e-commerce-g82m.onrender.com/api](https://e-commerce-g82m.onrender.com/api)
+- Repository: [https://github.com/marcosfacchetti9n-ship-it/E-commerce](https://github.com/marcosfacchetti9n-ship-it/E-commerce)
+
+## Why This Project
+
+This is not just a CRUD demo. It covers a full end-to-end e-commerce flow and shows:
+
+- backend architecture with layers and DTOs
+- authentication and authorization with JWT
+- relational modeling with PostgreSQL
+- admin and user role separation
+- deploy to Render
+- cloud database integration with Neon
+- responsive frontend with multiple screens
+
+## Tech Stack
 
 - Backend: Java 17, Spring Boot, Spring Security, Spring Data JPA, Maven
-- Base de datos: PostgreSQL
+- Database: PostgreSQL
 - Auth: JWT
-- Frontend: HTML, CSS y JavaScript
+- Frontend: HTML, CSS, JavaScript
 - Deploy: Render
-- Cloud database: Neon
+- Cloud DB: Neon
+- Containerization: Docker
 
-## Features
+## Main Features
 
-- Registro e inicio de sesion con JWT
-- Roles `USER` y `ADMIN`
-- Catalogo de productos y categorias
-- Detalle de producto
-- Carrito persistido por usuario
-- Checkout simple con generacion de orden y descuento de stock
-- Historial de ordenes del usuario
-- Panel admin para crear, editar, eliminar y listar productos y categorias
-- Validaciones de requests
-- Manejo global de errores
-- Estructura por capas
-- Dockerfile para backend
-- Variables de entorno
+- User registration and login
+- JWT-based authentication
+- Roles: `USER` and `ADMIN`
+- Product catalog
+- Categories
+- Product detail page
+- Persistent cart per user
+- Simple checkout flow
+- Order history per user
+- Admin panel for products and categories
+- Request validation
+- Global exception handling
+- Environment-based configuration
 
-## Estructura
+## Business Rules Implemented
+
+- `USER` can register, sign in, browse products, add items to the cart, confirm purchases, and view order history
+- `ADMIN` can create, edit, delete, and list products and categories
+- Checkout does not use real payments yet; it creates an order, stores purchased items, and decreases stock
+
+## Architecture
+
+The backend follows a clean layered structure:
+
+- `config`
+- `controller`
+- `dto`
+- `entity`
+- `exception`
+- `repository`
+- `security`
+- `service`
+
+Project structure:
 
 ```text
 .
-├── backend
-│   └── src/main/java/com/portfolio/ecommerce
-│       ├── config
-│       ├── controller
-│       ├── dto
-│       ├── entity
-│       ├── exception
-│       ├── repository
-│       ├── security
-│       └── service
-├── frontend
-│   ├── css
-│   ├── js
-│   ├── index.html
-│   ├── login.html
-│   ├── product.html
-│   ├── cart.html
-│   ├── orders.html
-│   └── admin.html
-├── Dockerfile
-├── render.yaml
-└── .env.example
+|-- backend
+|   `-- src/main/java/com/portfolio/ecommerce
+|       |-- config
+|       |-- controller
+|       |-- dto
+|       |-- entity
+|       |-- exception
+|       |-- repository
+|       |-- security
+|       `-- service
+|-- frontend
+|   |-- css
+|   |-- js
+|   |-- index.html
+|   |-- login.html
+|   |-- product.html
+|   |-- cart.html
+|   |-- orders.html
+|   `-- admin.html
+|-- Dockerfile
+|-- render.yaml
+`-- .env.example
 ```
 
-## Modelo de dominio
+## Domain Model
 
-- `User` tiene roles, carrito y ordenes
-- `Category` agrupa productos
-- `Product` pertenece a una categoria y tiene stock
-- `Cart` pertenece a un usuario
-- `CartItem` conecta carrito con productos y cantidad
-- `Order` pertenece a un usuario y guarda total, fecha y estado
-- `OrderItem` guarda snapshot del producto comprado, precio y cantidad
+- `User` has roles, cart, and orders
+- `Category` groups products
+- `Product` belongs to a category and stores stock
+- `Cart` belongs to a user
+- `CartItem` links cart, product, and quantity
+- `Order` belongs to a user and stores total, status, and creation date
+- `OrderItem` stores the purchased product snapshot, unit price, and quantity
 
-## Reglas funcionales implementadas
+## Demo Credentials
 
-- `USER` puede registrarse, iniciar sesion, listar productos, ver detalle, agregar al carrito, confirmar compra y ver sus ordenes
-- `ADMIN` puede crear, editar, eliminar y listar productos y categorias
-- El checkout no integra pagos reales: genera la orden, guarda los items comprados y descuenta stock
-
-## Variables de entorno
-
-Copiá `.env.example` como base y configurá:
-
-- `DB_URL`
-- `DB_USERNAME`
-- `DB_PASSWORD`
-- `JWT_SECRET`
-- `JWT_EXPIRATION_MS`
-- `CORS_ALLOWED_ORIGINS`
-
-## Backend local
-
-```bash
-cd backend
-mvn spring-boot:run
-```
-
-La API queda en `http://localhost:8080/api`.
-
-## Frontend local
-
-Podés abrir `frontend/index.html` con Live Server o cualquier static server. Antes de deployar, ajustá `frontend/js/config.js` si tu backend tiene otra URL.
-
-```js
-window.APP_CONFIG = {
-  API_BASE_URL: "http://localhost:8080/api"
-};
-```
-
-## Usuario admin seed
-
-Al levantar el backend por primera vez se crea:
+Admin user created automatically on startup:
 
 - Email: `admin@demo.com`
 - Password: `Admin123`
 
-Tambien se seedéan categorias y productos de ejemplo para que el proyecto se vea completo desde el minuto uno.
+The application also seeds demo categories and products so the catalog looks complete from the first run.
 
-## Endpoints principales
+## API Overview
 
 ### Auth
 
 - `POST /api/auth/register`
 - `POST /api/auth/login`
 
-### Publicos
+### Public
 
 - `GET /api/products`
 - `GET /api/products/{id}`
 - `GET /api/categories`
 
-### Usuario autenticado
+### Authenticated User
 
 - `GET /api/cart`
 - `POST /api/cart/items`
@@ -144,47 +148,94 @@ Tambien se seedéan categorias y productos de ejemplo para que el proyecto se ve
 - `PUT /api/admin/categories/{id}`
 - `DELETE /api/admin/categories/{id}`
 
-## Deploy en Render + Neon
+## Local Setup
 
 ### Backend
 
-1. Crear una base PostgreSQL en Neon.
-2. Crear un Web Service en Render usando este repo.
-3. Usar `Dockerfile` como build.
-4. En `render.yaml` ya queda preconfigurado el host de Neon y el usuario.
-5. Cargar en Render las variables sensibles reales:
+```bash
+cd backend
+mvn spring-boot:run
+```
 
-- `DB_PASSWORD`
-- `JWT_SECRET`
-- `CORS_ALLOWED_ORIGINS`
+The API runs on:
 
-6. Si cambiás de proyecto o branch de Neon, actualizá también `DB_URL`.
+```text
+http://localhost:8080/api
+```
 
 ### Frontend
 
-1. Crear un Static Site en Render apuntando a `frontend/`.
-2. Cambiar `frontend/js/config.js` para que `API_BASE_URL` apunte a tu backend de Render.
+You can open `frontend/index.html` with Live Server or any static server.
 
-Tambien podés usar `render.yaml` como punto de partida para los dos servicios.
+If needed, update:
 
-## Validacion
+[`frontend/js/config.js`](/C:/Users/Marco/OneDrive/Desktop/Codex_test_2/frontend/js/config.js)
 
-El backend compila con:
+```js
+window.APP_CONFIG = {
+    API_BASE_URL: "http://localhost:8080/api"
+};
+```
+
+## Environment Variables
+
+Use `.env.example` as a base.
+
+- `DB_URL`
+- `DB_USERNAME`
+- `DB_PASSWORD`
+- `JWT_SECRET`
+- `JWT_EXPIRATION_MS`
+- `CORS_ALLOWED_ORIGINS`
+
+## Deployment
+
+This project is deployed with:
+
+- Backend on Render as a Docker web service
+- Frontend on Render as a static site
+- PostgreSQL on Neon
+
+The repository also includes:
+
+- [Dockerfile](https://github.com/marcosfacchetti9n-ship-it/E-commerce/blob/main/Dockerfile)
+- [render.yaml](https://github.com/marcosfacchetti9n-ship-it/E-commerce/blob/main/render.yaml)
+
+## Validation
+
+The backend compiles successfully with:
 
 ```bash
 cd backend
 mvn -DskipTests compile
 ```
 
-## Siguientes mejoras naturales
+The project was also tested manually end to end after deployment:
 
-- Busqueda y filtros avanzados
-- Paginacion
-- Upload real de imagenes
-- Dashboard admin con metricas
-- Tests unitarios y de integracion
-- Refresh tokens
+- signup/login
+- catalog browsing
+- add to cart
+- checkout
+- order history
+- admin product/category management
 
-## Nota
+## Next Improvements
 
-Todavia no puse credenciales reales de Neon. Cuando me las pases, el proyecto ya esta preparado para conectarlas y dejarlo listo para deploy final.
+- search and advanced filters
+- pagination
+- image uploads
+- dashboard metrics for admin
+- unit and integration tests
+- refresh tokens
+- payment integration
+
+## Recruiter Notes
+
+This project was built to demonstrate the ability to:
+
+- design and implement a full stack application from scratch
+- model a relational domain in a realistic way
+- work with authentication and role-based authorization
+- deploy a backend and frontend to production
+- connect a cloud-hosted PostgreSQL database
+- finish a project end to end instead of leaving it as a local-only prototype
