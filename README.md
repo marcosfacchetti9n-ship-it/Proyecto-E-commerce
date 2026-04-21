@@ -1,62 +1,65 @@
 # Northstar Shop
 
-Full stack e-commerce portfolio project built from scratch with Java, Spring Boot, PostgreSQL, JWT, and a responsive vanilla JavaScript frontend.
+Hola, soy Marcos y este proyecto es un e-commerce full stack que desarrollé desde cero como parte de mi portfolio.
 
-The goal of this project is to show a recruiter-ready first version of a real product flow: authentication, roles, catalog, cart, checkout, orders, admin panel, deployment, and cloud database integration.
+Lo construí con Java, Spring Boot, PostgreSQL, JWT y frontend en HTML, CSS y JavaScript. Mi objetivo con este proyecto fue practicar y demostrar que puedo llevar una aplicación real de punta a punta: modelado de datos, autenticación, roles, lógica de negocio, frontend responsive, deploy y conexión a una base de datos cloud.
 
-## Live Demo
+## Demo
 
 - Frontend: [https://e-commerce-1-7jox.onrender.com](https://e-commerce-1-7jox.onrender.com)
 - Backend API: [https://e-commerce-g82m.onrender.com/api](https://e-commerce-g82m.onrender.com/api)
-- Repository: [https://github.com/marcosfacchetti9n-ship-it/E-commerce](https://github.com/marcosfacchetti9n-ship-it/E-commerce)
+- Repositorio: [https://github.com/marcosfacchetti9n-ship-it/E-commerce](https://github.com/marcosfacchetti9n-ship-it/E-commerce)
 
-## Why This Project
+## Que Quise Resolver Con Este Proyecto
 
-This is not just a CRUD demo. It covers a full end-to-end e-commerce flow and shows:
+No quise hacer solo un CRUD básico. Busqué construir una primera versión de e-commerce que se sintiera como una aplicación completa y seria, aunque todavía simplificada respecto a un sistema comercial real.
 
-- backend architecture with layers and DTOs
-- authentication and authorization with JWT
-- relational modeling with PostgreSQL
-- admin and user role separation
-- deploy to Render
-- cloud database integration with Neon
-- responsive frontend with multiple screens
+Con este proyecto quise practicar especialmente:
 
-## Tech Stack
+- arquitectura backend por capas
+- autenticación y autorización con JWT
+- modelado relacional con PostgreSQL
+- manejo de roles `USER` y `ADMIN`
+- flujo completo de carrito, checkout y órdenes
+- panel administrativo
+- deploy real de frontend y backend
+- uso de variables de entorno y base de datos cloud
+
+## Stack Tecnológico
 
 - Backend: Java 17, Spring Boot, Spring Security, Spring Data JPA, Maven
-- Database: PostgreSQL
-- Auth: JWT
-- Frontend: HTML, CSS, JavaScript
+- Base de datos: PostgreSQL
+- Autenticación: JWT
+- Frontend: HTML, CSS y JavaScript
 - Deploy: Render
-- Cloud DB: Neon
-- Containerization: Docker
+- Base cloud: Neon
+- Contenerización: Docker
 
-## Main Features
+## Funcionalidades Principales
 
-- User registration and login
-- JWT-based authentication
-- Roles: `USER` and `ADMIN`
-- Product catalog
-- Categories
-- Product detail page
-- Persistent cart per user
-- Simple checkout flow
-- Order history per user
-- Admin panel for products and categories
-- Request validation
-- Global exception handling
-- Environment-based configuration
+- Registro e inicio de sesión
+- Autenticación basada en JWT
+- Roles `USER` y `ADMIN`
+- Catálogo de productos
+- Categorías
+- Detalle de producto
+- Carrito persistido por usuario
+- Checkout simple
+- Historial de órdenes
+- Panel admin para productos y categorías
+- Validaciones de requests
+- Manejo global de errores
+- Configuración por variables de entorno
 
-## Business Rules Implemented
+## Reglas De Negocio Que Implementé
 
-- `USER` can register, sign in, browse products, add items to the cart, confirm purchases, and view order history
-- `ADMIN` can create, edit, delete, and list products and categories
-- Checkout does not use real payments yet; it creates an order, stores purchased items, and decreases stock
+- Un usuario con rol `USER` puede registrarse, iniciar sesión, navegar productos, agregarlos al carrito, confirmar una compra y ver su historial de órdenes
+- Un usuario con rol `ADMIN` puede crear, editar, eliminar y listar productos y categorías
+- El checkout no integra pagos reales todavía; genera la orden, guarda los productos comprados y descuenta stock
 
-## Architecture
+## Cómo Está Organizado El Backend
 
-The backend follows a clean layered structure:
+En el backend seguí una estructura limpia por capas para separar responsabilidades:
 
 - `config`
 - `controller`
@@ -67,7 +70,14 @@ The backend follows a clean layered structure:
 - `security`
 - `service`
 
-Project structure:
+La idea fue que:
+
+- los `controller` reciban la request
+- los `service` resuelvan la lógica de negocio
+- los `repository` manejen acceso a datos
+- los `dto` definan qué entra y qué sale por la API
+
+## Estructura Del Proyecto
 
 ```text
 .
@@ -95,39 +105,43 @@ Project structure:
 `-- .env.example
 ```
 
-## Domain Model
+## Modelo De Dominio
 
-- `User` has roles, cart, and orders
-- `Category` groups products
-- `Product` belongs to a category and stores stock
-- `Cart` belongs to a user
-- `CartItem` links cart, product, and quantity
-- `Order` belongs to a user and stores total, status, and creation date
-- `OrderItem` stores the purchased product snapshot, unit price, and quantity
+Modelé las relaciones principales de un e-commerce de esta forma:
 
-## Demo Credentials
+- `User` tiene roles, carrito y órdenes
+- `Category` agrupa productos
+- `Product` pertenece a una categoría y tiene stock
+- `Cart` pertenece a un usuario
+- `CartItem` conecta carrito, producto y cantidad
+- `Order` pertenece a un usuario y guarda total, estado y fecha
+- `OrderItem` guarda el snapshot del producto comprado, su precio y la cantidad
 
-Admin user created automatically on startup:
+Esto me permitió trabajar relaciones reales entre entidades y no solo tablas aisladas.
+
+## Credenciales Demo
+
+Al iniciar la app se crea automáticamente un usuario administrador:
 
 - Email: `admin@demo.com`
 - Password: `Admin123`
 
-The application also seeds demo categories and products so the catalog looks complete from the first run.
+También se cargan categorías y productos demo para que la aplicación tenga contenido desde el primer momento.
 
-## API Overview
+## API Principal
 
 ### Auth
 
 - `POST /api/auth/register`
 - `POST /api/auth/login`
 
-### Public
+### Públicos
 
 - `GET /api/products`
 - `GET /api/products/{id}`
 - `GET /api/categories`
 
-### Authenticated User
+### Usuario autenticado
 
 - `GET /api/cart`
 - `POST /api/cart/items`
@@ -148,7 +162,7 @@ The application also seeds demo categories and products so the catalog looks com
 - `PUT /api/admin/categories/{id}`
 - `DELETE /api/admin/categories/{id}`
 
-## Local Setup
+## Cómo Lo Levanto En Local
 
 ### Backend
 
@@ -157,7 +171,7 @@ cd backend
 mvn spring-boot:run
 ```
 
-The API runs on:
+La API corre en:
 
 ```text
 http://localhost:8080/api
@@ -165,9 +179,9 @@ http://localhost:8080/api
 
 ### Frontend
 
-You can open `frontend/index.html` with Live Server or any static server.
+El frontend puede abrirse con Live Server o cualquier servidor estático desde la carpeta `frontend`.
 
-If needed, update:
+Si hace falta, se puede cambiar la URL de la API en:
 
 [`frontend/js/config.js`](/C:/Users/Marco/OneDrive/Desktop/Codex_test_2/frontend/js/config.js)
 
@@ -177,9 +191,9 @@ window.APP_CONFIG = {
 };
 ```
 
-## Environment Variables
+## Variables De Entorno
 
-Use `.env.example` as a base.
+El proyecto usa estas variables:
 
 - `DB_URL`
 - `DB_USERNAME`
@@ -188,54 +202,62 @@ Use `.env.example` as a base.
 - `JWT_EXPIRATION_MS`
 - `CORS_ALLOWED_ORIGINS`
 
-## Deployment
+Dejé un archivo base en `.env.example`.
 
-This project is deployed with:
+## Deploy
 
-- Backend on Render as a Docker web service
-- Frontend on Render as a static site
-- PostgreSQL on Neon
+Este proyecto está deployado con:
 
-The repository also includes:
+- Backend en Render como Web Service con Docker
+- Frontend en Render como Static Site
+- PostgreSQL en Neon
+
+También agregué:
 
 - [Dockerfile](https://github.com/marcosfacchetti9n-ship-it/E-commerce/blob/main/Dockerfile)
 - [render.yaml](https://github.com/marcosfacchetti9n-ship-it/E-commerce/blob/main/render.yaml)
 
-## Validation
+## Validación
 
-The backend compiles successfully with:
+El backend compila correctamente con:
 
 ```bash
 cd backend
 mvn -DskipTests compile
 ```
 
-The project was also tested manually end to end after deployment:
+Además probé manualmente el flujo completo ya deployado:
 
-- signup/login
-- catalog browsing
-- add to cart
+- registro e inicio de sesión
+- navegación del catálogo
+- agregar productos al carrito
 - checkout
-- order history
-- admin product/category management
+- visualización de órdenes
+- gestión admin de productos y categorías
 
-## Next Improvements
+## Qué Aprendí / Qué Demuestra Este Proyecto
 
-- search and advanced filters
-- pagination
-- image uploads
-- dashboard metrics for admin
-- unit and integration tests
+Con este proyecto pude practicar y demostrar que puedo:
+
+- diseñar y construir una aplicación full stack desde cero
+- modelar un dominio relacional de forma coherente
+- trabajar con autenticación y control de roles
+- conectar frontend, backend y base de datos cloud
+- deployar una aplicación completa a producción
+- cerrar un proyecto funcional de punta a punta, no solo dejarlo corriendo en local
+
+## Próximas Mejoras Que Haría
+
+- búsqueda y filtros avanzados
+- paginación
+- subida real de imágenes
+- dashboard admin con métricas
+- tests unitarios y de integración
 - refresh tokens
-- payment integration
+- integración de pagos reales
 
-## Recruiter Notes
+## Nota Final
 
-This project was built to demonstrate the ability to:
+Este proyecto representa muy bien el tipo de trabajo que hoy estoy practicando: backend con Java/Spring, APIs, seguridad, SQL, lógica de negocio y despliegue real.
 
-- design and implement a full stack application from scratch
-- model a relational domain in a realistic way
-- work with authentication and role-based authorization
-- deploy a backend and frontend to production
-- connect a cloud-hosted PostgreSQL database
-- finish a project end to end instead of leaving it as a local-only prototype
+Actualmente estoy buscando mi primera oportunidad como desarrollador Java o Full Stack Junior, así que este repositorio forma parte directa de ese camino.
