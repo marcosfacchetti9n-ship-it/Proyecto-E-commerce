@@ -21,43 +21,52 @@
     </header>
 
     <main>
-        <section class="hero">
-            <div class="shell hero-grid">
-                <article class="hero-panel hero-copy">
-                    <span class="eyebrow">Novedades</span>
-                    <h2>Tecnologia y accesorios para un espacio de trabajo mejor.</h2>
-                    <p>Descubri una seleccion curada de accesorios, audio y equipamiento pensados para espacios de trabajo modernos, creativos y funcionales.</p>
+        <section class="storefront-hero">
+            <div class="shell hero-layout">
+                <div class="hero-copy">
+                    <span class="eyebrow">Tienda online</span>
+                    <h2>Mejora tu setup con productos elegidos para trabajar mejor.</h2>
+                    <p>Audio, perifericos y accesorios para armar un espacio comodo, prolijo y listo para producir.</p>
                     <div class="cta-row">
-                        <a class="btn" href="#catalog">Explorar productos</a>
-                        <a class="btn-outline" href="login.html">Mi cuenta</a>
+                        <a class="btn" href="#catalog">Ver catalogo</a>
+                        <a class="btn-outline" href="cart.html">Ir al carrito</a>
                     </div>
-                </article>
-                <aside class="glass-card stats">
-                    <div class="stat-card">
-                        <strong>Productos destacados</strong>
-                        <span class="meta">Productos seleccionados para setups minimalistas, funcionales y con personalidad.</span>
-                    </div>
-                    <div class="stat-card">
-                        <strong>Compra agil</strong>
-                        <span class="meta">Un flujo simple para descubrir, agregar al carrito y confirmar tu compra en pocos pasos.</span>
-                    </div>
-                    <div class="stat-card">
-                        <strong data-user-name>Disenado para tu espacio</strong>
-                        <span class="meta">Audio, perifericos y accesorios premium para elevar tu espacio todos los dias.</span>
-                    </div>
-                </aside>
+                </div>
+                <div class="hero-proof">
+                    <span>Catalogo activo</span>
+                    <span>Checkout simple</span>
+                    <span>Panel admin</span>
+                </div>
             </div>
         </section>
 
         <section class="section" id="catalog">
             <div class="shell">
-                <div class="section-head">
+                <div class="catalog-heading">
                     <div>
-                        <h3>Catalogo destacado</h3>
+                        <span class="eyebrow">Catalogo</span>
+                        <h3>Productos disponibles</h3>
                         <p id="catalogCount">Cargando productos...</p>
                     </div>
-                    <div class="pill-row" id="categoryFilters"></div>
                 </div>
+
+                <div class="catalog-toolbar">
+                    <label class="search-field" for="catalogSearch">
+                        <span>Buscar</span>
+                        <input id="catalogSearch" type="search" placeholder="Teclado, audio, lampara...">
+                    </label>
+                    <label class="select-field" for="catalogSort">
+                        <span>Ordenar</span>
+                        <select id="catalogSort">
+                            <option value="featured">Destacados</option>
+                            <option value="priceAsc">Menor precio</option>
+                            <option value="priceDesc">Mayor precio</option>
+                            <option value="stockDesc">Mas stock</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="pill-row" id="categoryFilters"></div>
                 <div id="catalogMessage" class="message"></div>
                 <div class="product-grid" id="productGrid"></div>
             </div>

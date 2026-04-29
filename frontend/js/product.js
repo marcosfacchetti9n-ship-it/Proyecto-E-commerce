@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     method: "POST",
                     body: JSON.stringify({ productId: product.id, quantity: Number(document.getElementById("productQty").value) })
                 });
+                setCartItemCount(getCartItemCount() + Number(document.getElementById("productQty").value));
                 showMessage("productMessage", "Producto agregado al carrito.", "success");
             } catch (error) {
                 showMessage("productMessage", error.message);

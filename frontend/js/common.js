@@ -24,6 +24,7 @@ function setSession(authResponse) {
 function clearSession() {
     localStorage.removeItem(storageKeys.token);
     localStorage.removeItem(storageKeys.user);
+    localStorage.removeItem("portfolio_shop_cart_count");
 }
 
 function getCurrentUser() {
@@ -33,6 +34,15 @@ function getCurrentUser() {
 
 function isAdmin() {
     return Boolean(getCurrentUser()?.roles?.includes("ADMIN"));
+}
+
+function getCartItemCount() {
+    return Number(localStorage.getItem("portfolio_shop_cart_count") || 0);
+}
+
+function setCartItemCount(count) {
+    localStorage.setItem("portfolio_shop_cart_count", String(count));
+    updateCartBadge();
 }
 
 function requireAuth(redirect = "login.html") {
@@ -49,6 +59,7 @@ function requireAdmin() {
 }
 
 async function api(path, options = {}) {
+    // Todas las requests pasan por aca para mantener auth y errores en un solo lugar.
     const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
     const token = getToken();
     if (token) headers.Authorization = `Bearer ${token}`;
@@ -90,12 +101,16 @@ function bindLayout() {
     const currentPage = location.pathname.split("/").pop() || "index.html";
     const links = [
         { href: "index.html", label: "Catalogo" },
-        ...(user ? [{ href: "cart.html", label: "Carrito" }, { href: "orders.html", label: "Ordenes" }] : []),
+        ...(user ? [{ href: "cart.html", label: "Carrito", badge: true }, { href: "orders.html", label: "Ordenes" }] : []),
         ...(isAdmin() ? [{ href: "admin.html", label: "Admin" }] : [])
     ];
 
     authArea.innerHTML = links
-        .map(link => `<a href="${link.href}" class="${currentPage === link.href ? "active" : ""}">${link.label}</a>`)
+        .map(link => `
+            <a href="${link.href}" class="${currentPage === link.href ? "active" : ""}">
+                ${link.label}${link.badge ? `<span class="cart-badge" data-cart-badge>${getCartItemCount()}</span>` : ""}
+            </a>
+        `)
         .join("");
 
     if (user) {
@@ -107,8 +122,17 @@ function bindLayout() {
             window.location.href = "login.html";
         });
     } else {
-        authArea.innerHTML += `<a href="login.html" class="${currentPage === "login.html" ? "active" : ""}">Login</a>`;
+        authArea.innerHTML += `<a href="login.html" class="${currentPage === "login.html" ? "active" : ""}">Ingresar</a>`;
     }
+    updateCartBadge();
+}
+
+function updateCartBadge() {
+    document.querySelectorAll("[data-cart-badge]").forEach(badge => {
+        const count = getCartItemCount();
+        badge.textContent = count;
+        badge.hidden = count === 0;
+    });
 }
 
 document.addEventListener("DOMContentLoaded", bindLayout);

@@ -5,7 +5,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function loadCart() {
     try {
-        renderCart(await api("/cart"));
+        const cart = await api("/cart");
+        setCartItemCount(cart.items.reduce((total, item) => total + item.quantity, 0));
+        renderCart(cart);
     } catch (error) {
         showMessage("cartMessage", error.message);
     }
