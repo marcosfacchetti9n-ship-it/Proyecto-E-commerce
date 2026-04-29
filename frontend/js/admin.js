@@ -3,12 +3,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadAdminData();
     document.getElementById("categoryForm")?.addEventListener("submit", handleCategorySubmit);
     document.getElementById("productForm")?.addEventListener("submit", handleProductSubmit);
+    document.getElementById("productImageUrl")?.addEventListener("input", event => {
+        updateProductImagePreview(event.target.value);
+    });
 });
 
 async function loadAdminData() {
     try {
         const [categories, products] = await Promise.all([api("/admin/categories"), api("/admin/products")]);
         populateCategorySelect(categories);
+        renderAdminStats(categories, products);
         document.getElementById("adminCategories").innerHTML = categories.map(category => `
             <tr>
                 <td>${category.name}</td>
@@ -21,7 +25,12 @@ async function loadAdminData() {
         `).join("");
         document.getElementById("adminProducts").innerHTML = products.map(product => `
             <tr>
-                <td>${product.name}</td>
+                <td>
+                    <div class="table-product">
+                        <img src="${product.imageUrl}" alt="${product.name}" loading="lazy">
+                        <span>${product.name}</span>
+                    </div>
+                </td>
                 <td>${product.category.name}</td>
                 <td>${currency(product.price)}</td>
                 <td>${product.stock}</td>
@@ -52,6 +61,7 @@ async function loadAdminData() {
                 document.getElementById("productStock").value = product.stock;
                 document.getElementById("productImageUrl").value = product.imageUrl;
                 document.getElementById("productCategoryId").value = product.category.id;
+                updateProductImagePreview(product.imageUrl);
                 window.scrollTo({ top: 0, behavior: "smooth" });
             });
         });
@@ -78,6 +88,39 @@ function populateCategorySelect(categories) {
     document.getElementById("productCategoryId").innerHTML =
         `<option value="">Selecciona una categoria</option>` +
         categories.map(category => `<option value="${category.id}">${category.name}</option>`).join("");
+}
+
+function renderAdminStats(categories, products) {
+    const totalStock = products.reduce((total, product) => total + product.stock, 0);
+    const activeProducts = products.filter(product => product.stock > 0).length;
+    const inventoryValue = products.reduce((total, product) => total + product.price * product.stock, 0);
+
+    document.getElementById("adminStats").innerHTML = [
+        { label: "Productos", value: products.length },
+        { label: "Con stock", value: activeProducts },
+        { label: "Unidades", value: totalStock },
+        { label: "Categorias", value: categories.length },
+        { label: "Valor inventario", value: currency(inventoryValue) }
+    ].map(stat => `
+        <article class="stat-card">
+            <span>${stat.label}</span>
+            <strong>${stat.value}</strong>
+        </article>
+    `).join("");
+}
+
+function updateProductImagePreview(url) {
+    const preview = document.getElementById("productImagePreview");
+    if (!preview) return;
+
+    if (!url) {
+        preview.innerHTML = "Vista previa de la imagen";
+        preview.style.backgroundImage = "";
+        return;
+    }
+
+    preview.innerHTML = "";
+    preview.style.backgroundImage = `url("${url}")`;
 }
 
 async function handleCategorySubmit(event) {
@@ -117,6 +160,7 @@ async function handleProductSubmit(event) {
         });
         event.target.reset();
         document.getElementById("productId").value = "";
+        updateProductImagePreview("");
         showMessage("adminMessage", productId ? "Producto actualizado correctamente." : "Producto creado correctamente.", "success");
         await loadAdminData();
     } catch (error) {

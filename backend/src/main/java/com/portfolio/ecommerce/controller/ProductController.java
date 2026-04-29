@@ -2,6 +2,7 @@ package com.portfolio.ecommerce.controller;
 
 import com.portfolio.ecommerce.dto.product.ProductResponse;
 import com.portfolio.ecommerce.service.ProductService;
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +19,15 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public List<ProductResponse> findAll(@RequestParam(required = false) Long categoryId) {
-        return productService.findAll(categoryId);
+    public List<ProductResponse> findAll(
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) Boolean inStock,
+            @RequestParam(defaultValue = "featured") String sort
+    ) {
+        return productService.findAll(categoryId, search, minPrice, maxPrice, inStock, sort);
     }
 
     @GetMapping("/{id}")

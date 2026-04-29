@@ -29,6 +29,7 @@
                 </div>
             </div>
             <div id="adminMessage" class="message"></div>
+            <section class="admin-stats" id="adminStats" aria-label="Resumen del catalogo"></section>
 
             <section class="admin-grid">
                 <article class="panel-card">
@@ -73,6 +74,7 @@
                             <label for="productImageUrl">URL de imagen</label>
                             <input id="productImageUrl" type="url" required>
                         </div>
+                        <div class="image-preview" id="productImagePreview">Vista previa de la imagen</div>
                         <div class="field">
                             <label for="productCategoryId">Categoria</label>
                             <select id="productCategoryId" required></select>
@@ -101,7 +103,7 @@
                         <div class="table-shell">
                             <table>
                                 <thead>
-                                    <tr><th>Nombre</th><th>Categoria</th><th>Precio</th><th>Stock</th><th>Acciones</th></tr>
+                                    <tr><th>Producto</th><th>Categoria</th><th>Precio</th><th>Stock</th><th>Acciones</th></tr>
                                 </thead>
                                 <tbody id="adminProducts"></tbody>
                             </table>

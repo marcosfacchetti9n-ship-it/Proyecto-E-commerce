@@ -8,6 +8,7 @@ Lo construí con Java, Spring Boot, PostgreSQL, JWT y frontend en HTML, CSS y Ja
 
 - Frontend: [https://e-commerce-1-7jox.onrender.com](https://e-commerce-1-7jox.onrender.com)
 - Backend API: [https://e-commerce-g82m.onrender.com/api](https://e-commerce-g82m.onrender.com/api)
+- Health check: [https://e-commerce-g82m.onrender.com/api/health](https://e-commerce-g82m.onrender.com/api/health)
 - Repositorio: [https://github.com/marcosfacchetti9n-ship-it/E-commerce](https://github.com/marcosfacchetti9n-ship-it/E-commerce)
 
 ## Que Quise Resolver Con Este Proyecto
@@ -41,12 +42,14 @@ Con este proyecto quise practicar especialmente:
 - Autenticación basada en JWT
 - Roles `USER` y `ADMIN`
 - Catálogo de productos
+- Búsqueda, filtros por categoría, precio y stock
 - Categorías
 - Detalle de producto
 - Carrito persistido por usuario
 - Checkout simple
 - Historial de órdenes
 - Panel admin para productos y categorías
+- Panel admin con resumen de inventario y vista previa de imágenes
 - Validaciones de requests
 - Manejo global de errores
 - Configuración por variables de entorno
@@ -137,7 +140,10 @@ También se cargan categorías y productos demo para que la aplicación tenga co
 
 ### Públicos
 
+- `GET /api`
+- `GET /api/health`
 - `GET /api/products`
+- `GET /api/products?search=audio&categoryId=1&minPrice=50&maxPrice=300&inStock=true&sort=priceAsc`
 - `GET /api/products/{id}`
 - `GET /api/categories`
 
@@ -219,11 +225,11 @@ También agregué:
 
 ## Validación
 
-El backend compila correctamente con:
+El backend compila y tiene tests unitarios para reglas importantes de carrito y checkout:
 
 ```bash
 cd backend
-mvn -DskipTests compile
+mvn test
 ```
 
 Además probé manualmente el flujo completo ya deployado:
@@ -248,11 +254,10 @@ Con este proyecto pude practicar y demostrar que puedo:
 
 ## Próximas Mejoras Que Haría
 
-- búsqueda y filtros avanzados
 - paginación
 - subida real de imágenes
-- dashboard admin con métricas
-- tests unitarios y de integración
+- más métricas en el dashboard admin
+- más tests de integración
 - refresh tokens
 - integración de pagos reales
 

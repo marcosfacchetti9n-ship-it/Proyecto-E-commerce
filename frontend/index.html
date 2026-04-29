@@ -55,6 +55,14 @@
                         <span>Buscar</span>
                         <input id="catalogSearch" type="search" placeholder="Teclado, audio, lampara...">
                     </label>
+                    <label class="select-field" for="catalogMinPrice">
+                        <span>Precio minimo</span>
+                        <input id="catalogMinPrice" type="number" min="0" step="1" placeholder="0">
+                    </label>
+                    <label class="select-field" for="catalogMaxPrice">
+                        <span>Precio maximo</span>
+                        <input id="catalogMaxPrice" type="number" min="0" step="1" placeholder="Sin limite">
+                    </label>
                     <label class="select-field" for="catalogSort">
                         <span>Ordenar</span>
                         <select id="catalogSort">
@@ -63,6 +71,10 @@
                             <option value="priceDesc">Mayor precio</option>
                             <option value="stockDesc">Mas stock</option>
                         </select>
+                    </label>
+                    <label class="checkbox-field" for="catalogInStock">
+                        <input id="catalogInStock" type="checkbox">
+                        <span>Solo con stock</span>
                     </label>
                 </div>
 

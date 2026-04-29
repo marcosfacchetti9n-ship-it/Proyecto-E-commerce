@@ -1,15 +1,25 @@
 let allProducts = [];
 let selectedCategoryId = "";
+let searchDebounceId;
 
 async function loadCatalog() {
     // Mostramos skeletons para que el cold start de Render se sienta como carga normal.
     renderProductSkeletons();
     try {
-        const [categories, products] = await Promise.all([api("/categories"), api("/products")]);
-        allProducts = products;
+        const categories = await api("/categories");
         renderCategoryFilters(categories);
-        renderProducts(getFilteredProducts());
         bindCatalogControls();
+        await loadProducts();
+    } catch (error) {
+        showMessage("catalogMessage", error.message);
+    }
+}
+
+async function loadProducts() {
+    renderProductSkeletons();
+    try {
+        allProducts = await api(`/products${buildProductQuery()}`);
+        renderProducts(allProducts);
     } catch (error) {
         showMessage("catalogMessage", error.message);
     }
@@ -25,36 +35,46 @@ function renderCategoryFilters(categories) {
             container.querySelectorAll(".pill").forEach(pill => pill.classList.remove("active"));
             button.classList.add("active");
             selectedCategoryId = button.dataset.category;
-            renderProducts(getFilteredProducts());
+            loadProducts();
         });
     });
 }
 
 function bindCatalogControls() {
-    document.getElementById("catalogSearch")?.addEventListener("input", () => renderProducts(getFilteredProducts()));
-    document.getElementById("catalogSort")?.addEventListener("change", () => renderProducts(getFilteredProducts()));
+    document.getElementById("catalogSearch")?.addEventListener("input", () => {
+        clearTimeout(searchDebounceId);
+        searchDebounceId = setTimeout(loadProducts, 280);
+    });
+    document.getElementById("catalogMinPrice")?.addEventListener("input", () => {
+        clearTimeout(searchDebounceId);
+        searchDebounceId = setTimeout(loadProducts, 280);
+    });
+    document.getElementById("catalogMaxPrice")?.addEventListener("input", () => {
+        clearTimeout(searchDebounceId);
+        searchDebounceId = setTimeout(loadProducts, 280);
+    });
+    document.getElementById("catalogSort")?.addEventListener("change", loadProducts);
+    document.getElementById("catalogInStock")?.addEventListener("change", loadProducts);
 }
 
-function getFilteredProducts() {
-    const searchTerm = document.getElementById("catalogSearch")?.value.trim().toLowerCase() || "";
+function buildProductQuery() {
+    const params = new URLSearchParams();
+    const searchTerm = document.getElementById("catalogSearch")?.value.trim();
+    const minPrice = document.getElementById("catalogMinPrice")?.value;
+    const maxPrice = document.getElementById("catalogMaxPrice")?.value;
     const sort = document.getElementById("catalogSort")?.value || "featured";
+    const inStock = document.getElementById("catalogInStock")?.checked;
 
-    // En esta version portfolio filtramos en cliente para mantener simple la API publica.
-    const filtered = allProducts.filter(product => {
-        const matchesCategory = !selectedCategoryId || product.category.id === Number(selectedCategoryId);
-        const matchesSearch = [product.name, product.description, product.category.name]
-            .join(" ")
-            .toLowerCase()
-            .includes(searchTerm);
-        return matchesCategory && matchesSearch;
-    });
+    // Los filtros viajan a la API para mostrar busqueda server-side en el portfolio.
+    if (selectedCategoryId) params.set("categoryId", selectedCategoryId);
+    if (searchTerm) params.set("search", searchTerm);
+    if (minPrice) params.set("minPrice", minPrice);
+    if (maxPrice) params.set("maxPrice", maxPrice);
+    if (inStock) params.set("inStock", "true");
+    if (sort !== "featured") params.set("sort", sort);
 
-    return filtered.sort((a, b) => {
-        if (sort === "priceAsc") return a.price - b.price;
-        if (sort === "priceDesc") return b.price - a.price;
-        if (sort === "stockDesc") return b.stock - a.stock;
-        return a.id - b.id;
-    });
+    const query = params.toString();
+    return query ? `?${query}` : "";
 }
 
 function renderProducts(products) {
