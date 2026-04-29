@@ -498,6 +498,42 @@ textarea {
     transition: 0.2s ease;
 }
 
+.password-field {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 76px;
+    gap: 8px;
+}
+
+.password-field input {
+    min-width: 0;
+}
+
+.icon-button {
+    width: 76px;
+    height: 46px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.demo-access {
+    display: grid;
+    gap: 8px;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.72);
+    margin: 16px 0 18px;
+    padding: 14px;
+}
+
+.demo-access span {
+    color: var(--muted);
+    font-size: 0.94rem;
+}
+
 .field input:focus,
 .field textarea:focus,
 .field select:focus {

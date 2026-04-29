@@ -27,6 +27,12 @@
                 <section class="auth-card">
                     <h2>Iniciar sesion</h2>
                     <p class="helper-text">Accede a tu cuenta para gestionar tu carrito, tus compras y tu historial de ordenes.</p>
+                    <div class="demo-access">
+                        <strong>Acceso demo admin</strong>
+                        <span>Email: admin@demo.com</span>
+                        <span>Contrasena: Admin123</span>
+                        <button class="btn-muted" type="button" id="fillAdminDemo">Usar credenciales demo</button>
+                    </div>
                     <form id="loginForm" class="form-grid">
                         <div class="field">
                             <label for="loginEmail">Correo electronico</label>
@@ -34,7 +40,10 @@
                         </div>
                         <div class="field">
                             <label for="loginPassword">Contrasena</label>
-                            <input id="loginPassword" type="password" required>
+                            <div class="password-field">
+                                <input id="loginPassword" type="password" required>
+                                <button type="button" class="icon-button" data-toggle-password="loginPassword" aria-label="Mostrar contrasena" title="Mostrar contrasena">Ver</button>
+                            </div>
                         </div>
                         <button class="btn" type="submit">Ingresar</button>
                     </form>
@@ -60,7 +69,10 @@
                         </div>
                         <div class="field">
                             <label for="registerPassword">Contrasena</label>
-                            <input id="registerPassword" type="password" minlength="6" required>
+                            <div class="password-field">
+                                <input id="registerPassword" type="password" minlength="6" required>
+                                <button type="button" class="icon-button" data-toggle-password="registerPassword" aria-label="Mostrar contrasena" title="Mostrar contrasena">Ver</button>
+                            </div>
                         </div>
                         <button class="btn" type="submit">Registrarme</button>
                     </form>
